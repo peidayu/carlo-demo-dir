@@ -1,4 +1,4 @@
-## Carlo-demo-drr
+## Carlo-demo-dir
 > list dir - a demo for chrome project Carlo
 
 npm i   
