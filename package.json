@@ -1,0 +1,14 @@
+{
+  "name": "carlo-demo-dir",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "peixiaochuang@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "carlo": "^0.9.11"
+  }
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="google" content="notranslate">
+    <link href="https://fonts.googleapis.com/css?family=Share+Tech+Mono" rel="stylesheet">
+    <title>HELLO</title>
+    <style>
+        html, body {
+            font-family: 'Share Tech Mono', monospace;
+            user-select: none;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #2b2b2b;
+        }
+        .hide {
+            display: none;
+        }
+        .con {
+            width: 80%;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .list {
+            max-height: 80%;
+            overflow: auto;
+        }
+        .item {
+            color: #fff;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 10px;
+            background-color: #ad9000;
+        }
+        .item.dir {
+            cursor: pointer;
+            background-color: #45baff;
+        }
+        .item.exit {
+            cursor: pointer;
+            text-align: center;
+            margin-top: 30px;
+            background-color: #ff4c4c;
+        }
+        .path {
+            padding: 10px;
+            color: #fff;
+        }
+        .path .leaf {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body onload="run()">
+    <div class="con">
+        <div class="path"></div>
+        <div class="list"></div>
+        <div class="item exit" onclick="exit()">EXIT</div>
+    </div>
+    <script>
+        let base = ['.'];
+        const $path = document.querySelector('.path');
+        const $list = document.querySelector('.list');
+        document.oncontextmenu = () => false;
+        async function run() {
+            renderdir(base[0]);
+        }
+        function back(item) {
+            base.pop();
+            renderdir(base.join('/'));
+        }
+        function render(item) {
+            if (item.isdir) {
+                base.push(item.name);
+                renderdir(base.join('/'));
+            }
+        }
+        function renderDirByIndex(index) {
+            base = base.slice(0, index + 1);
+            renderdir(base.join('/'));
+        }
+        async function renderdir(dir) {
+            const list = await ls(dir);
+            console.log('list is -> ', list);
+            $path.innerHTML = base.map((p, index) => `<span
+                class="leaf"
+                onclick="renderDirByIndex(${index})"
+            >${p}</span>`).join('/');
+            $list.innerHTML = [ base.length > 1 ? `
+                <div class="item dir" onclick="back()">
+                    ..
+                </div>
+            ` : ''].concat(list.sort((a, b) => b.isdir - a.isdir).map(item => `
+                <div class="item ${item.isdir ? 'dir' : ''}" onclick="render({name:'${item.name}',isdir:${item.isdir}})">
+                    ${item.name}
+                </div>
+            `)).join('');
+        }
+    </script>
+</body>
+</html>
